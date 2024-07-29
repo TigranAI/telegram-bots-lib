@@ -1,0 +1,22 @@
+[versions]
+kotlin-logging-jvm = "5.1.4"
+retrofit = "2.11.0"
+jackson-module-kotlin = "2.17.2"
+spring-boot = "3.3.2"
+kotlin-reflect = "2.0.0"
+kotlinx-coroutines-reactor = "1.8.1"
+
+[libraries]
+kotlin-logging-jvm = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "kotlin-logging-jvm" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+converter-jackson = { module = "com.squareup.retrofit2:converter-jackson", version.ref = "retrofit" }
+jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson-module-kotlin" }
+spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter", version.ref = "spring-boot" }
+spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin-reflect" }
+kotlinx-coroutines-reactor = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactor", version.ref = "kotlinx-coroutines-reactor" }
+
+[plugins]
+jvm = { id = "org.jetbrains.kotlin.jvm", version = "1.9.24" }
+spring = { id = "org.jetbrains.kotlin.plugin.spring", version = "1.9.24" }
+springBoot = { id = 'org.springframework.boot', version = "3.3.2" }
