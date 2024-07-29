@@ -5,5 +5,4 @@ data class ExternalReplyInfo(
     val chat: Chat?,
     val messageId: Long?,
     val linkPreviewOptions: LinkPreviewOptions?,
-
-    )
+)
