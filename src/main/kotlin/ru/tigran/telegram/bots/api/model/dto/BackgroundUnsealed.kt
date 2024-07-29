@@ -2,9 +2,9 @@ package ru.tigran.telegram.bots.api.model.dto
 
 import ru.tigran.telegram.bots.api.model.enums.BackgroundType
 
-data class Background(
+data class BackgroundUnsealed(
     val type: BackgroundType,
-    val fill: BackgroundFill?,
+    val fill: BackgroundFillUnsealed?,
     val darkThemeDimming: Boolean?,
     val document: Document?,
     val isBlurred: Boolean?,
@@ -14,19 +14,19 @@ data class Background(
     val themeName: String?,
 ) {
     fun sealed() = when(type) {
-        BackgroundType.FILL -> BackgroundSealed.BackgroundTypeFill(
+        BackgroundType.FILL -> Background.BackgroundTypeFill(
             type = type,
             fill = fill!!.sealed(),
             darkThemeDimming = darkThemeDimming!!,
         )
-        BackgroundType.WALLPAPER -> BackgroundSealed.BackgroundTypeWallpaper(
+        BackgroundType.WALLPAPER -> Background.BackgroundTypeWallpaper(
             type = type,
             document = document!!,
             darkThemeDimming = darkThemeDimming!!,
             isBlurred = isBlurred,
             isMoving = isMoving,
         )
-        BackgroundType.PATTERN -> BackgroundSealed.BackgroundTypePattern(
+        BackgroundType.PATTERN -> Background.BackgroundTypePattern(
             type = type,
             document = document!!,
             fill = fill!!.sealed(),
@@ -34,19 +34,19 @@ data class Background(
             isInverted = isInverted,
             isMoving = isMoving,
         )
-        BackgroundType.CHAT_THEME -> BackgroundSealed.BackgroundTypeChatTheme(
+        BackgroundType.CHAT_THEME -> Background.BackgroundTypeChatTheme(
             type = type,
             themeName = themeName!!,
         )
     }
 }
 
-sealed class BackgroundSealed {
+sealed class Background {
     class BackgroundTypeFill(
         val type: BackgroundType,
-        val fill: BackgroundFillSealed,
+        val fill: BackgroundFill,
         val darkThemeDimming: Boolean,
-    ) : BackgroundSealed()
+    ) : Background()
 
     class BackgroundTypeWallpaper(
         val type: BackgroundType,
@@ -54,19 +54,19 @@ sealed class BackgroundSealed {
         val darkThemeDimming: Boolean,
         val isBlurred: Boolean?,
         val isMoving: Boolean?,
-    ) : BackgroundSealed()
+    ) : Background()
 
     class BackgroundTypePattern(
         val type: BackgroundType,
         val document: Document,
-        val fill: BackgroundFillSealed,
+        val fill: BackgroundFill,
         val intensity: Int,
         val isInverted: Boolean?,
         val isMoving: Boolean?,
-    ) : BackgroundSealed()
+    ) : Background()
 
     class BackgroundTypeChatTheme(
         val type: BackgroundType,
         val themeName: String,
-    ) : BackgroundSealed()
+    ) : Background()
 }

@@ -1,7 +1,7 @@
 package ru.tigran.telegram.bots.api
 
 import org.springframework.stereotype.Service
-import ru.tigran.telegram.bots.api.model.dto.Update
+import ru.tigran.telegram.bots.api.model.dto.UpdateUnsealed
 import ru.tigran.telegram.bots.api.model.dto.User
 import ru.tigran.telegram.bots.api.model.request.GetUpdatesRequest
 import ru.tigran.telegram.bots.configuration.api.TelegramApiProperties
@@ -15,5 +15,5 @@ class TelegramAsyncClient(
 
     suspend fun getUpdates(
         request: GetUpdatesRequest,
-    ): List<Update> = api.getUpdates(properties.token, request.asRequestMap()).unwrap()
+    ): List<UpdateUnsealed> = api.getUpdates(properties.token, request.asRequestMap()).unwrap()
 }
