@@ -2,7 +2,7 @@ package ru.tigran.telegram.bots.api.model.dto
 
 import ru.tigran.telegram.bots.util.anyNotNull
 
-data class MessageUnsealed(
+data class MessageApi(
     val messageId: Long,
     val messageThreadId: Long?,
     val from: User?,
@@ -15,7 +15,7 @@ data class MessageUnsealed(
     val forwardOrigin: MessageOrigin?,
     val isTopicMessage: Boolean?,
     val isAutomaticForward: Boolean?,
-    val replyToMessage: MessageUnsealed?,
+    val replyToMessage: MessageApi?,
     val externalReply: ExternalReplyInfo?,
     val quote: TextQuote?,
     val replyToStory: Story?,
@@ -60,7 +60,7 @@ data class MessageUnsealed(
     val messageAutoDeleteTimerChanged: MessageAutoDeleteTimerChanged?,
     val migrateToChatId: Long?,
     val migrateFromChatId: Long?,
-    val pinnedMessage: MessageUnsealed?,
+    val pinnedMessage: MessageApi?,
     val invoice: Invoice?,
     val successfulPayment: SuccessfulPayment?,
     val refundedPayment: RefundedPayment?,
@@ -71,7 +71,7 @@ data class MessageUnsealed(
     val passportData: PassportData?,
     val proximityAlertTriggered: ProximityAlertTriggered?,
     val boostAdded: ChatBoostAdded?,
-    val chatBackgroundSet: ChatBackgroundUnsealed?,
+    val chatBackgroundSet: ChatBackgroundApi?,
     val forumTopicCreated: ForumTopicCreated?,
     val forumTopicEdited: ForumTopicEdited?,
     val forumTopicClosed: ForumTopicClosed?,
@@ -81,15 +81,15 @@ data class MessageUnsealed(
     val giveawayCreated: GiveawayCreated?,
     val giveaway: Giveaway?,
     val giveawayWinners: GiveawayWinners?,
-    val giveawayCompleted: GiveawayCompletedUnsealed?,
+    val giveawayCompleted: GiveawayCompletedApi?,
     val videoChatScheduled: VideoChatScheduled?,
     val videoChatStarted: VideoChatStarted?,
     val videoChatEnded: VideoChatEnded?,
     val videoChatParticipantsInvited: VideoChatParticipantsInvited?,
     val webAppData: WebAppData?,
     val replyMarkup: InlineKeyboardMarkup?,
-) {
-    fun sealed(): Message {
+) : ApiGodDto<Message> {
+    override fun typify(): Message {
         if (anyNotNull(messageThreadId,
                 from,
                 senderChat,
@@ -186,7 +186,7 @@ data class MessageUnsealed(
                 forwardOrigin = forwardOrigin,
                 isTopicMessage = isTopicMessage,
                 isAutomaticForward = isAutomaticForward,
-                replyToMessage = replyToMessage?.sealed(),
+                replyToMessage = replyToMessage?.typify(),
                 externalReply = externalReply,
                 quote = quote,
                 replyToStory = replyToStory,
@@ -231,7 +231,7 @@ data class MessageUnsealed(
                 messageAutoDeleteTimerChanged = messageAutoDeleteTimerChanged,
                 migrateToChatId = migrateToChatId,
                 migrateFromChatId = migrateFromChatId,
-                pinnedMessage = pinnedMessage?.sealed(),
+                pinnedMessage = pinnedMessage?.typify(),
                 invoice = invoice,
                 successfulPayment = successfulPayment,
                 refundedPayment = refundedPayment,
@@ -242,7 +242,7 @@ data class MessageUnsealed(
                 passportData = passportData,
                 proximityAlertTriggered = proximityAlertTriggered,
                 boostAdded = boostAdded,
-                chatBackgroundSet = chatBackgroundSet?.sealed(),
+                chatBackgroundSet = chatBackgroundSet?.typify(),
                 forumTopicCreated = forumTopicCreated,
                 forumTopicEdited = forumTopicEdited,
                 forumTopicClosed = forumTopicClosed,
@@ -252,7 +252,7 @@ data class MessageUnsealed(
                 giveawayCreated = giveawayCreated,
                 giveaway = giveaway,
                 giveawayWinners = giveawayWinners,
-                giveawayCompleted = giveawayCompleted?.sealed(),
+                giveawayCompleted = giveawayCompleted?.typify(),
                 videoChatScheduled = videoChatScheduled,
                 videoChatStarted = videoChatStarted,
                 videoChatEnded = videoChatEnded,
@@ -269,23 +269,27 @@ data class MessageUnsealed(
     }
 }
 
-sealed class Message {
-    class InaccessibleMessage(
-        val messageId: Long,
-        val date: Long,
-        val chat: Chat,
-    ) : Message()
+interface Message {
+    val messageId: Long
+    val date: Long
+    val chat: Chat
 
-    class FullMessage(
-        val messageId: Long,
+    data class InaccessibleMessage(
+        override val messageId: Long,
+        override val date: Long,
+        override val chat: Chat,
+    ) : Message
+
+    data class FullMessage(
+        override val messageId: Long,
         val messageThreadId: Long?,
         val from: User?,
         val senderChat: Chat?,
         val senderBoostCount: Int?,
         val senderBusinessBot: User?,
-        val date: Long,
+        override val date: Long,
         val businessConnectionId: Long?,
-        val chat: Chat,
+        override val chat: Chat,
         val forwardOrigin: MessageOrigin?,
         val isTopicMessage: Boolean?,
         val isAutomaticForward: Boolean?,
@@ -362,5 +366,5 @@ sealed class Message {
         val videoChatParticipantsInvited: VideoChatParticipantsInvited?,
         val webAppData: WebAppData?,
         val replyMarkup: InlineKeyboardMarkup?,
-    ): Message()
+    ): Message
 }

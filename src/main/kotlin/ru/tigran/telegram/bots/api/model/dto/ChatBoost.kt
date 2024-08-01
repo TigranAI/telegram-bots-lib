@@ -1,16 +1,16 @@
 package ru.tigran.telegram.bots.api.model.dto
 
-data class ChatBoostUnsealed(
+data class ChatBoostApi(
     val boostId: String,
     val addDate: Long,
     val expirationDate: Long,
-    val source: ChatBoostSourceUnsealed,
-) {
-    fun sealed() = ChatBoost(
+    val source: ChatBoostSourceApi,
+) : ApiGodDto<ChatBoost> {
+    override fun typify() = ChatBoost(
         boostId = boostId,
         addDate = addDate,
         expirationDate = expirationDate,
-        source = source.sealed(),
+        source = source.typify(),
     )
 }
 

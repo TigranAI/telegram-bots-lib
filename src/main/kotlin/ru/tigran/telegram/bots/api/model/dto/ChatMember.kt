@@ -2,7 +2,7 @@ package ru.tigran.telegram.bots.api.model.dto
 
 import ru.tigran.telegram.bots.api.model.enums.ChatMemberType
 
-data class ChatMemberUnsealed(
+data class ChatMemberApi(
     val status: ChatMemberType,
     val user: User,
     val isAnonymous: Boolean?,
@@ -34,8 +34,8 @@ data class ChatMemberUnsealed(
     val canSendOtherMessages: Boolean?,
     val canAddWebPagePreviews: Boolean?,
     val untilDate: Long?,
-) {
-    fun sealed() = when(status) {
+) : ApiGodDto<ChatMember> {
+    override fun typify() = when(status) {
         ChatMemberType.CREATOR -> ChatMember.ChatMemberOwner(
             status = status,
             user = user,
@@ -99,17 +99,20 @@ data class ChatMemberUnsealed(
     }
 }
 
-sealed class ChatMember {
-    class ChatMemberOwner(
-        val status: ChatMemberType,
-        val user: User,
+interface ChatMember {
+    val status: ChatMemberType
+    val user: User
+
+    data class ChatMemberOwner(
+        override val status: ChatMemberType,
+        override val user: User,
         val isAnonymous: Boolean,
         val customTitle: String?,
-    ) : ChatMember()
+    ) : ChatMember
 
-    class ChatMemberAdministrator(
-        val status: ChatMemberType,
-        val user: User,
+    data class ChatMemberAdministrator(
+        override val status: ChatMemberType,
+        override val user: User,
         val customTitle: String?,
         val isAnonymous: Boolean,
         val canBeEdited: Boolean,
@@ -127,16 +130,16 @@ sealed class ChatMember {
         val canEditMessages: Boolean?,
         val canPinMessages: Boolean?,
         val canManageTopics: Boolean?,
-    ) : ChatMember()
+    ) : ChatMember
 
-    class ChatMemberMember(
-        val status: ChatMemberType,
-        val user: User,
-    ) : ChatMember()
+    data class ChatMemberMember(
+        override val status: ChatMemberType,
+        override val user: User,
+    ) : ChatMember
 
-    class ChatMemberRestricted(
-        val status: ChatMemberType,
-        val user: User,
+    data class ChatMemberRestricted(
+        override val status: ChatMemberType,
+        override val user: User,
         val isMember: Boolean,
         val canSendMessages: Boolean,
         val canSendAudios: Boolean,
@@ -153,16 +156,16 @@ sealed class ChatMember {
         val canPinMessages: Boolean,
         val canManageTopics: Boolean,
         val untilDate: Long,
-    ) : ChatMember()
+    ) : ChatMember
 
-    class ChatMemberLeft(
-        val status: ChatMemberType,
-        val user: User,
-    ) : ChatMember()
+    data class ChatMemberLeft(
+        override val status: ChatMemberType,
+        override val user: User,
+    ) : ChatMember
 
-    class ChatMemberBanned(
-        val status: ChatMemberType,
-        val user: User,
+    data class ChatMemberBanned(
+        override val status: ChatMemberType,
+        override val user: User,
         val untilDate: Long,
-    ) : ChatMember()
+    ) : ChatMember
 }

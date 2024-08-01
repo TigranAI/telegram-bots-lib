@@ -2,9 +2,9 @@ package ru.tigran.telegram.bots.api.model.dto
 
 import ru.tigran.telegram.bots.api.model.enums.BackgroundType
 
-data class BackgroundUnsealed(
+data class BackgroundApi(
     val type: BackgroundType,
-    val fill: BackgroundFillUnsealed?,
+    val fill: BackgroundFillApi?,
     val darkThemeDimming: Boolean?,
     val document: Document?,
     val isBlurred: Boolean?,
@@ -12,11 +12,11 @@ data class BackgroundUnsealed(
     val intensity: Int?,
     val isInverted: Boolean?,
     val themeName: String?,
-) {
-    fun sealed() = when(type) {
+) : ApiGodDto<Background> {
+    override fun typify() = when(type) {
         BackgroundType.FILL -> Background.BackgroundTypeFill(
             type = type,
-            fill = fill!!.sealed(),
+            fill = fill!!.typify(),
             darkThemeDimming = darkThemeDimming!!,
         )
         BackgroundType.WALLPAPER -> Background.BackgroundTypeWallpaper(
@@ -29,7 +29,7 @@ data class BackgroundUnsealed(
         BackgroundType.PATTERN -> Background.BackgroundTypePattern(
             type = type,
             document = document!!,
-            fill = fill!!.sealed(),
+            fill = fill!!.typify(),
             intensity = intensity!!,
             isInverted = isInverted,
             isMoving = isMoving,
@@ -41,32 +41,34 @@ data class BackgroundUnsealed(
     }
 }
 
-sealed class Background {
-    class BackgroundTypeFill(
-        val type: BackgroundType,
+interface Background {
+    val type: BackgroundType
+
+    data class BackgroundTypeFill(
+        override val type: BackgroundType,
         val fill: BackgroundFill,
         val darkThemeDimming: Boolean,
-    ) : Background()
+    ) : Background
 
-    class BackgroundTypeWallpaper(
-        val type: BackgroundType,
+    data class BackgroundTypeWallpaper(
+        override val type: BackgroundType,
         val document: Document,
         val darkThemeDimming: Boolean,
         val isBlurred: Boolean?,
         val isMoving: Boolean?,
-    ) : Background()
+    ) : Background
 
-    class BackgroundTypePattern(
-        val type: BackgroundType,
+    data class BackgroundTypePattern(
+        override val type: BackgroundType,
         val document: Document,
         val fill: BackgroundFill,
         val intensity: Int,
         val isInverted: Boolean?,
         val isMoving: Boolean?,
-    ) : Background()
+    ) : Background
 
-    class BackgroundTypeChatTheme(
-        val type: BackgroundType,
+    data class BackgroundTypeChatTheme(
+        override val type: BackgroundType,
         val themeName: String,
-    ) : Background()
+    ) : Background
 }

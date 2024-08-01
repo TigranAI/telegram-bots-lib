@@ -31,6 +31,6 @@ internal class TelegramUpdatesPoller(
         )
         updates.maxByOrNull { it.updateId }?.let { offset = it.updateId + 1 }
         log.debug { "Got ${updates.size} updates, last update id offset is $offset" }
-        queue.enqueueAll(updates.map { it.sealed() })
+        queue.enqueueAll(updates.map { it.typify() })
     }
 }

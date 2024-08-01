@@ -2,12 +2,12 @@ package ru.tigran.telegram.bots.api.model.dto
 
 import ru.tigran.telegram.bots.api.model.enums.ReactionType
 
-data class ReactionUnsealed(
+data class ReactionApi(
     val type: ReactionType,
     val emoji: String?,
     val customEmojiId: String?,
-) {
-    fun sealed() = when (type) {
+) : ApiGodDto<Reaction> {
+    override fun typify() = when (type) {
         ReactionType.EMOJI -> Reaction.ReactionTypeEmoji(
             type = type,
             emoji = emoji!!,
@@ -19,14 +19,16 @@ data class ReactionUnsealed(
     }
 }
 
-sealed class Reaction {
-    class ReactionTypeEmoji(
-        val type: ReactionType,
-        val emoji: String,
-    ) : Reaction()
+interface Reaction {
+    val type: ReactionType
 
-    class ReactionTypeCustomEmoji(
-        val type: ReactionType,
+    data class ReactionTypeEmoji(
+        override val type: ReactionType,
+        val emoji: String,
+    ) : Reaction
+
+    data class ReactionTypeCustomEmoji(
+        override val type: ReactionType,
         val customEmojiId: String,
-    ) : Reaction()
+    ) : Reaction
 }

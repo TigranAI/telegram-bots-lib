@@ -1,14 +1,14 @@
 package ru.tigran.telegram.bots.api.model.dto
 
-data class GiveawayCompletedUnsealed(
+data class GiveawayCompletedApi(
     val winnerCount: Int,
     val unclaimedPrizeCount: Int?,
-    val giveawayMessage: MessageUnsealed?,
-) {
-    fun sealed() = GiveawayCompleted(
+    val giveawayMessage: MessageApi?,
+) : ApiGodDto<GiveawayCompleted> {
+    override fun typify() = GiveawayCompleted(
         winnerCount = winnerCount,
         unclaimedPrizeCount = unclaimedPrizeCount,
-        giveawayMessage = giveawayMessage?.sealed(),
+        giveawayMessage = giveawayMessage?.typify(),
     )
 }
 

@@ -2,17 +2,17 @@ package ru.tigran.telegram.bots.api.model.dto
 
 import ru.tigran.telegram.bots.api.model.enums.UpdateType
 
-data class UpdateUnsealed(
+data class UpdateApi(
     val updateId: Long,
-    val message: MessageUnsealed?,
-    val editedMessage: MessageUnsealed?,
-    val channelPost: MessageUnsealed?,
-    val editedChannelPost: MessageUnsealed?,
+    val message: MessageApi?,
+    val editedMessage: MessageApi?,
+    val channelPost: MessageApi?,
+    val editedChannelPost: MessageApi?,
     val businessConnection: BusinessConnection?,
-    val businessMessage: MessageUnsealed?,
-    val editedBusinessMessage: MessageUnsealed?,
+    val businessMessage: MessageApi?,
+    val editedBusinessMessage: MessageApi?,
     val deletedBusinessMessages: BusinessMessagesDeleted?,
-    val messageReaction: MessageReactionUpdatedUnsealed?,
+    val messageReaction: MessageReactionUpdatedApi?,
     val messageReactionCount: MessageReactionCountUpdated?,
     val inlineQuery: InlineQuery?,
     val chosenInlineResult: ChosenInlineResult?,
@@ -21,12 +21,12 @@ data class UpdateUnsealed(
     val preCheckoutQuery: PreCheckoutQuery?,
     val poll: Poll?,
     val pollAnswer: PollAnswer?,
-    val myChatMember: ChatMemberUpdatedUnsealed?,
-    val chatMember: ChatMemberUpdatedUnsealed?,
+    val myChatMember: ChatMemberUpdatedApi?,
+    val chatMember: ChatMemberUpdatedApi?,
     val chatJoinRequest: ChatJoinRequest?,
-    val chatBoost: ChatBoostUpdatedUnsealed?,
+    val chatBoost: ChatBoostUpdatedApi?,
     val removedChatBoost: ChatBoostRemoved?,
-) {
+) : ApiGodDto<Update> {
     val type: UpdateType
         get() = when {
             message != null -> UpdateType.MESSAGE
@@ -54,22 +54,22 @@ data class UpdateUnsealed(
             else -> UpdateType.UNKNOWN
         }
     
-    fun sealed() = when(type) {
+    override fun typify() = when(type) {
         UpdateType.MESSAGE -> Update.MessageUpdate(
             updateId = updateId,
-            message = message!!.sealed(),
+            message = message!!.typify(),
         )
         UpdateType.EDITED_MESSAGE -> Update.EditedMessageUpdate(
             updateId = updateId,
-            editedMessage = editedMessage!!.sealed(),
+            editedMessage = editedMessage!!.typify(),
         )
         UpdateType.CHANNEL_POST -> Update.ChannelPostUpdate(
             updateId = updateId,
-            channelPost = channelPost!!.sealed(),
+            channelPost = channelPost!!.typify(),
         )
         UpdateType.EDITED_CHANNEL_POST -> Update.EditedChannelPostUpdate(
             updateId = updateId,
-            editedChannelPost = editedChannelPost!!.sealed(),
+            editedChannelPost = editedChannelPost!!.typify(),
         )
         UpdateType.BUSINESS_CONNECTION -> Update.BusinessConnectionUpdate(
             updateId = updateId,
@@ -77,11 +77,11 @@ data class UpdateUnsealed(
         )
         UpdateType.BUSINESS_MESSAGE -> Update.BusinessMessageUpdate(
             updateId = updateId,
-            businessMessage = businessMessage!!.sealed(),
+            businessMessage = businessMessage!!.typify(),
         )
         UpdateType.EDITED_BUSINESS_MESSAGE -> Update.EditedBusinessMessageUpdate(
             updateId = updateId,
-            editedBusinessMessage = editedBusinessMessage!!.sealed(),
+            editedBusinessMessage = editedBusinessMessage!!.typify(),
         )
         UpdateType.DELETED_BUSINESS_MESSAGES -> Update.DeletedBusinessMessagesUpdate(
             updateId = updateId,
@@ -89,7 +89,7 @@ data class UpdateUnsealed(
         )
         UpdateType.MESSAGE_REACTION -> Update.MessageReactionUpdate(
             updateId = updateId,
-            messageReaction = messageReaction!!.sealed(),
+            messageReaction = messageReaction!!.typify(),
         )
         UpdateType.MESSAGE_REACTION_COUNT -> Update.MessageReactionCountUpdate(
             updateId = updateId,
@@ -125,11 +125,11 @@ data class UpdateUnsealed(
         )
         UpdateType.MY_CHAT_MEMBER -> Update.MyChatMemberUpdate(
             updateId = updateId,
-            myChatMember = myChatMember!!.sealed(),
+            myChatMember = myChatMember!!.typify(),
         )
         UpdateType.CHAT_MEMBER -> Update.ChatMemberUpdate(
             updateId = updateId,
-            chatMember = chatMember!!.sealed(),
+            chatMember = chatMember!!.typify(),
         )
         UpdateType.CHAT_JOIN_REQUEST -> Update.ChatJoinRequestUpdate(
             updateId = updateId,
@@ -137,7 +137,7 @@ data class UpdateUnsealed(
         )
         UpdateType.CHAT_BOOST -> Update.ChatBoostUpdate(
             updateId = updateId,
-            chatBoost = chatBoost!!.sealed(),
+            chatBoost = chatBoost!!.typify(),
         )
         UpdateType.REMOVED_CHAT_BOTS -> Update.RemovedChatBoostUpdate(
             updateId = updateId,
@@ -149,120 +149,120 @@ data class UpdateUnsealed(
     }
 }
 
-sealed class Update(
-    val updateId: Long,
-) {
-    class MessageUpdate(
-        updateId: Long,
+interface Update {
+    val updateId: Long
+
+    data class MessageUpdate(
+        override val updateId: Long,
         val message: Message,
-    ) : Update(updateId)
+    ) : Update
 
-    class EditedMessageUpdate(
-        updateId: Long,
+    data class EditedMessageUpdate(
+        override val updateId: Long,
         val editedMessage: Message,
-    ) : Update(updateId)
+    ) : Update
 
-    class ChannelPostUpdate(
-        updateId: Long,
+    data class ChannelPostUpdate(
+        override val updateId: Long,
         val channelPost: Message,
-    ) : Update(updateId)
+    ) : Update
 
-    class EditedChannelPostUpdate(
-        updateId: Long,
+    data class EditedChannelPostUpdate(
+        override val updateId: Long,
         val editedChannelPost: Message,
-    ) : Update(updateId)
+    ) : Update
 
-    class BusinessConnectionUpdate(
-        updateId: Long,
+    data class BusinessConnectionUpdate(
+        override val updateId: Long,
         val businessConnection: BusinessConnection,
-    ) : Update(updateId)
+    ) : Update
 
-    class BusinessMessageUpdate(
-        updateId: Long,
+    data class BusinessMessageUpdate(
+        override val updateId: Long,
         val businessMessage: Message,
-    ) : Update(updateId)
+    ) : Update
 
-    class EditedBusinessMessageUpdate(
-        updateId: Long,
+    data class EditedBusinessMessageUpdate(
+        override val updateId: Long,
         val editedBusinessMessage: Message,
-    ) : Update(updateId)
+    ) : Update
 
-    class DeletedBusinessMessagesUpdate(
-        updateId: Long,
+    data class DeletedBusinessMessagesUpdate(
+        override val updateId: Long,
         val deletedBusinessMessages: BusinessMessagesDeleted,
-    ) : Update(updateId)
+    ) : Update
 
-    class MessageReactionUpdate(
-        updateId: Long,
+    data class MessageReactionUpdate(
+        override val updateId: Long,
         val messageReaction: MessageReactionUpdated,
-    ) : Update(updateId)
+    ) : Update
 
-    class MessageReactionCountUpdate(
-        updateId: Long,
+    data class MessageReactionCountUpdate(
+        override val updateId: Long,
         val messageReactionCount: MessageReactionCountUpdated,
-    ) : Update(updateId)
+    ) : Update
 
-    class InlineQueryUpdate(
-        updateId: Long,
+    data class InlineQueryUpdate(
+        override val updateId: Long,
         val inlineQuery: InlineQuery,
-    ) : Update(updateId)
+    ) : Update
 
-    class ChosenInlineResultUpdate(
-        updateId: Long,
+    data class ChosenInlineResultUpdate(
+        override val updateId: Long,
         val chosenInlineResult: ChosenInlineResult,
-    ) : Update(updateId)
+    ) : Update
 
-    class CallbackQueryUpdate(
-        updateId: Long,
+    data class CallbackQueryUpdate(
+        override val updateId: Long,
         val callbackQuery: CallbackQuery,
-    ) : Update(updateId)
+    ) : Update
 
-    class ShippingQueryUpdate(
-        updateId: Long,
+    data class ShippingQueryUpdate(
+        override val updateId: Long,
         val shippingQuery: ShippingQuery,
-    ) : Update(updateId)
+    ) : Update
 
-    class PreCheckoutQueryUpdate(
-        updateId: Long,
+    data class PreCheckoutQueryUpdate(
+        override val updateId: Long,
         val preCheckoutQuery: PreCheckoutQuery,
-    ) : Update(updateId)
+    ) : Update
 
-    class PollUpdate(
-        updateId: Long,
+    data class PollUpdate(
+        override val updateId: Long,
         val poll: Poll?,
-    ) : Update(updateId)
+    ) : Update
 
-    class PollAnswerUpdate(
-        updateId: Long,
+    data class PollAnswerUpdate(
+        override val updateId: Long,
         val pollAnswer: PollAnswer,
-    ) : Update(updateId)
+    ) : Update
 
-    class MyChatMemberUpdate(
-        updateId: Long,
+    data class MyChatMemberUpdate(
+        override val updateId: Long,
         val myChatMember: ChatMemberUpdated,
-    ) : Update(updateId)
+    ) : Update
 
-    class ChatMemberUpdate(
-        updateId: Long,
+    data class ChatMemberUpdate(
+        override val updateId: Long,
         val chatMember: ChatMemberUpdated,
-    ) : Update(updateId)
+    ) : Update
 
-    class ChatJoinRequestUpdate(
-        updateId: Long,
+    data class ChatJoinRequestUpdate(
+        override val updateId: Long,
         val chatJoinRequest: ChatJoinRequest,
-    ) : Update(updateId)
+    ) : Update
 
-    class ChatBoostUpdate(
-        updateId: Long,
+    data class ChatBoostUpdate(
+        override val updateId: Long,
         val chatBoost: ChatBoostUpdated,
-    ) : Update(updateId)
+    ) : Update
 
-    class RemovedChatBoostUpdate(
-        updateId: Long,
+    data class RemovedChatBoostUpdate(
+        override val updateId: Long,
         val removedChatBoost: ChatBoostRemoved,
-    ) : Update(updateId)
+    ) : Update
 
-    class UnknownUpdate(
-        updateId: Long,
-    ) : Update(updateId)
+    data class UnknownUpdate(
+        override val updateId: Long,
+    ) : Update
 }

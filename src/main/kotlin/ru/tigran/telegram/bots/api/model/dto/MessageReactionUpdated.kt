@@ -1,22 +1,22 @@
 package ru.tigran.telegram.bots.api.model.dto
 
-data class MessageReactionUpdatedUnsealed(
+data class MessageReactionUpdatedApi(
     val chat: Chat,
     val messageId: Long,
     val user: User?,
     val actorChat: Chat?,
     val date: Long,
-    val oldReaction: List<ReactionUnsealed>,
-    val newReaction: List<ReactionUnsealed>,
-) {
-    fun sealed() = MessageReactionUpdated(
+    val oldReaction: List<ReactionApi>,
+    val newReaction: List<ReactionApi>,
+) : ApiGodDto<MessageReactionUpdated> {
+    override fun typify() = MessageReactionUpdated(
         chat = chat,
         messageId = messageId,
         user = user,
         actorChat = actorChat,
         date = date,
-        oldReaction = oldReaction.map { it.sealed() },
-        newReaction = newReaction.map { it.sealed() }
+        oldReaction = oldReaction.map { it.typify() },
+        newReaction = newReaction.map { it.typify() }
     )
 }
 

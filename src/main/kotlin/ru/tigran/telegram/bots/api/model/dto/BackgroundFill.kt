@@ -2,15 +2,15 @@ package ru.tigran.telegram.bots.api.model.dto
 
 import ru.tigran.telegram.bots.api.model.enums.BackgroundFillType
 
-data class BackgroundFillUnsealed(
+data class BackgroundFillApi(
     val type: BackgroundFillType,
     val color: Int?,
     val topColor: Int?,
     val bottomColor: Int?,
     val rotationAngle: Int?,
     val colors: List<Int>?,
-) {
-    fun sealed() = when(type) {
+) : ApiGodDto<BackgroundFill> {
+    override fun typify() = when(type) {
         BackgroundFillType.SOLID -> BackgroundFill.BackgroundFillSolid(
             type = type,
             color = color!!,
@@ -28,21 +28,23 @@ data class BackgroundFillUnsealed(
     }
 }
 
-sealed class BackgroundFill {
-    class BackgroundFillSolid(
-        val type: BackgroundFillType,
-        val color: Int,
-    ) : BackgroundFill()
+interface BackgroundFill {
+    val type: BackgroundFillType
 
-    class BackgroundFillGradient(
-        val type: BackgroundFillType,
+    data class BackgroundFillSolid(
+        override val type: BackgroundFillType,
+        val color: Int,
+    ) : BackgroundFill
+
+    data class BackgroundFillGradient(
+        override val type: BackgroundFillType,
         val topColor: Int,
         val bottomColor: Int,
         val rotationAngle: Int,
-    ) : BackgroundFill()
+    ) : BackgroundFill
 
-    class BackgroundFillFreeformGradient(
-        val type: BackgroundFillType,
+    data class BackgroundFillFreeformGradient(
+        override val type: BackgroundFillType,
         val colors: List<Int>,
-    ) : BackgroundFill()
+    ) : BackgroundFill
 }
