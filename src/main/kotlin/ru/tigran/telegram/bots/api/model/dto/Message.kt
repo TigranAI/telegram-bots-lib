@@ -1,5 +1,6 @@
 package ru.tigran.telegram.bots.api.model.dto
 
+import ru.tigran.telegram.bots.api.model.ApiGodDto
 import ru.tigran.telegram.bots.util.anyNotNull
 
 data class MessageApi(
@@ -87,7 +88,7 @@ data class MessageApi(
     val videoChatEnded: VideoChatEnded?,
     val videoChatParticipantsInvited: VideoChatParticipantsInvited?,
     val webAppData: WebAppData?,
-    val replyMarkup: InlineKeyboardMarkup?,
+    val replyMarkup: ReplyMarkupApi?,
 ) : ApiGodDto<Message> {
     override fun typify(): Message {
         if (anyNotNull(messageThreadId,
@@ -258,7 +259,7 @@ data class MessageApi(
                 videoChatEnded = videoChatEnded,
                 videoChatParticipantsInvited = videoChatParticipantsInvited,
                 webAppData = webAppData,
-                replyMarkup = replyMarkup,
+                replyMarkup = replyMarkup?.typify(),
             )
         }
         return Message.InaccessibleMessage(
@@ -365,6 +366,6 @@ interface Message {
         val videoChatEnded: VideoChatEnded?,
         val videoChatParticipantsInvited: VideoChatParticipantsInvited?,
         val webAppData: WebAppData?,
-        val replyMarkup: InlineKeyboardMarkup?,
+        val replyMarkup: ReplyMarkup?,
     ): Message
 }

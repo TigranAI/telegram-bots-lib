@@ -1,5 +1,7 @@
 package ru.tigran.telegram.bots.api.model.dto
 
+import ru.tigran.telegram.bots.api.model.ApiGodDto
+
 data class MessageReactionUpdatedApi(
     val chat: Chat,
     val messageId: Long,
