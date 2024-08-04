@@ -17,18 +17,22 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
 import ru.tigran.telegram.bots.api.TelegramBotApi
+import ru.tigran.telegram.bots.util.TelegramBotsInterceptor
 import ru.tigran.telegram.bots.util.TelegramCallAdapterFactory
 
 @Configuration
 @ComponentScan("ru.tigran.telegram.bots.api")
 @EnableConfigurationProperties(TelegramApiProperties::class)
-class TelegramApiConfiguration {
+class TelegramApiConfiguration(
+    private val properties: TelegramApiProperties,
+) {
     @Bean
     fun telegramBotApi(
         properties: TelegramApiProperties,
     ): TelegramBotApi {
         val jackson = JacksonConverterFactory.create(telegramApiCompatibleJacksonObjectMapper)
         val client = OkHttpClient.Builder()
+            .addInterceptor(TelegramBotsInterceptor(properties))
             .addInterceptor(HttpLoggingInterceptor().setLevel(properties.loggingLevel))
             .build()
         val retrofit = Retrofit.Builder()

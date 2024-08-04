@@ -1,80 +1,46 @@
 package ru.tigran.telegram.bots.api
 
-import okhttp3.MultipartBody
-import retrofit2.http.*
+import okhttp3.RequestBody
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.POST
 import ru.tigran.telegram.bots.api.model.TelegramResponse
 import ru.tigran.telegram.bots.api.model.dto.MessageApi
 import ru.tigran.telegram.bots.api.model.dto.MessageId
 import ru.tigran.telegram.bots.api.model.dto.UpdateApi
 import ru.tigran.telegram.bots.api.model.dto.User
-import ru.tigran.telegram.bots.api.model.request.*
 
 interface TelegramBotApi {
-    @GET("/bot{token}/getMe")
-    suspend fun getMe(
-        @Path("token") token: String,
-    ): TelegramResponse<User>
+    @GET("/getMe")
+    suspend fun getMe(): TelegramResponse<User>
 
-    @POST("/bot{token}/logOut")
-    suspend fun logOut(
-        @Path("token") token: String,
-    ): TelegramResponse<Void>
+    @POST("/logOut")
+    suspend fun logOut(): TelegramResponse<Void>
 
-    @POST("/bot{token}/close")
-    suspend fun close(
-        @Path("token") token: String,
-    ): TelegramResponse<Void>
+    @POST("/close")
+    suspend fun close(): TelegramResponse<Void>
 
-    @GET("/bot{token}/getUpdates")
-    suspend fun getUpdates(
-        @Path("token") token: String,
-        @QueryMap params: Map<String, String>,
-    ): TelegramResponse<List<UpdateApi>>
+    @POST("/getUpdates")
+    suspend fun getUpdates(@Body params: RequestBody): TelegramResponse<List<UpdateApi>>
 
-    @POST("/bot{token}/sendMessage")
-    suspend fun sendMessage(
-        @Path("token") token: String,
-        @Body message: SendMessageRequest,
-    ): TelegramResponse<MessageApi>
+    @POST("/sendMessage")
+    suspend fun sendMessage(@Body message: RequestBody): TelegramResponse<MessageApi>
 
-    @POST("/bot{token}/forwardMessage")
-    suspend fun forwardMessage(
-        @Path("token") token: String,
-        @Body message: ForwardMessageRequest,
-    ): TelegramResponse<MessageApi>
+    @POST("/forwardMessage")
+    suspend fun forwardMessage(@Body message: RequestBody): TelegramResponse<MessageApi>
 
-    @POST("/bot{token}/forwardMessages")
-    suspend fun forwardMessages(
-        @Path("token") token: String,
-        @Body messages: ForwardMessagesRequest,
-    ): TelegramResponse<List<MessageId>>
+    @POST("/forwardMessages")
+    suspend fun forwardMessages(@Body messages: RequestBody): TelegramResponse<List<MessageId>>
 
-    @POST("/bot{token}/copyMessage")
-    suspend fun copyMessage(
-        @Path("token") token: String,
-        @Body message: CopyMessageRequest,
-    ): TelegramResponse<MessageId>
+    @POST("/copyMessage")
+    suspend fun copyMessage(@Body message: RequestBody): TelegramResponse<MessageId>
 
-    @POST("/bot{token}/copyMessages")
-    suspend fun copyMessages(
-        @Path("token") token: String,
-        @Body message: CopyMessagesRequest,
-    ): TelegramResponse<List<MessageId>>
+    @POST("/copyMessages")
+    suspend fun copyMessages(@Body message: RequestBody): TelegramResponse<List<MessageId>>
 
-    @Multipart
-    @POST("/bot{token}/sendPhoto")
-    suspend fun sendPhoto(
-        @Path("token") token: String,
-        @Body photo: SendPhotoRequest,
-        @Part photoMultipart: MultipartBody.Part?,
-    ): TelegramResponse<MessageApi>
+    @POST("/sendPhoto")
+    suspend fun sendPhoto(@Body photo: RequestBody): TelegramResponse<MessageApi>
 
-    @Multipart
-    @POST("/bot{token}/sendAudio")
-    suspend fun sendAudio(
-        @Path("token") token: String,
-        @Body audio: SendAudioRequest,
-        @Part audioMultipart: MultipartBody.Part?,
-        @Part thumbnailMultipart: MultipartBody.Part?,
-    ): TelegramResponse<MessageApi>
+    @POST("/sendAudio")
+    suspend fun sendAudio(@Body audio: RequestBody): TelegramResponse<MessageApi>
 }

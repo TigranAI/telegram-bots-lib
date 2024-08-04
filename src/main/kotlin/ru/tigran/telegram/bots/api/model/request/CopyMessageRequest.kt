@@ -1,5 +1,6 @@
 package ru.tigran.telegram.bots.api.model.request
 
+import ru.tigran.telegram.bots.api.model.TelegramRequest
 import ru.tigran.telegram.bots.api.model.dto.MessageEntity
 import ru.tigran.telegram.bots.api.model.dto.ReplyMarkup
 import ru.tigran.telegram.bots.api.model.dto.ReplyParameters
@@ -18,4 +19,4 @@ data class CopyMessageRequest(
     val protectContent: Boolean? = null,
     val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
-)
+) : TelegramRequest

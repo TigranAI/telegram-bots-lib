@@ -1,5 +1,6 @@
 package ru.tigran.telegram.bots.api.model.request
 
+import ru.tigran.telegram.bots.api.model.TelegramRequest
 import ru.tigran.telegram.bots.api.model.dto.LinkPreviewOptions
 import ru.tigran.telegram.bots.api.model.dto.MessageEntity
 import ru.tigran.telegram.bots.api.model.dto.ReplyMarkup
@@ -19,4 +20,4 @@ data class SendMessageRequest(
     val messageEffectId: String? = null,
     val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
-)
+) : TelegramRequest
