@@ -1,12 +1,8 @@
 package ru.tigran.telegram.bots.util
 
 import okhttp3.MediaType
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import org.springframework.http.MediaTypeFactory
 import org.springframework.util.MimeType
-import ru.tigran.telegram.bots.api.model.dto.InputFile
-import ru.tigran.telegram.bots.configuration.api.telegramApiCompatibleJacksonObjectMapper
 import java.io.File
 import java.util.*
 import kotlin.reflect.KClass
@@ -33,16 +29,5 @@ inline fun <reified T> KProperty<T>.isSubclassOf(kClass: KClass<*>) =
 private val humps = "(?<=.)(?=\\p{Upper})".toRegex()
 fun String.toSnakeCase() = replace(humps, "_").lowercase()
 
-fun MultipartBody.Builder.addFormDataAnyPart(name: String, value: Any?) {
-    when(value) {
-        is String -> this.addFormDataPart(name, value)
-        is InputFile.InputFileMultipart -> this.addFormDataPart(name, value.file.name, RequestBody.create(
-            value.file.getMediaType(), value.file
-        ))
-        is InputFile.InputFileId -> this.addFormDataPart(name, value.fileId)
-        is InputFile.InputFileUrl -> this.addFormDataPart(name, value.url)
-        else -> value?.let {
-            this.addFormDataPart(name, telegramApiCompatibleJacksonObjectMapper.writeValueAsString(it))
-        }
-    }
-}
+inline fun <reified T> Any?.tryCast(default: T? = null): T? =
+    if (this is T) this else default

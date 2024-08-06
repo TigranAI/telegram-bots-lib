@@ -38,13 +38,11 @@ data class ChatMemberApi(
 ) : ApiGodDto<ChatMember> {
     override fun typify() = when(status) {
         ChatMemberType.CREATOR -> ChatMember.ChatMemberOwner(
-            status = status,
             user = user,
             isAnonymous = isAnonymous!!,
             customTitle = customTitle,
         )
         ChatMemberType.ADMINISTRATOR -> ChatMember.ChatMemberAdministrator(
-            status = status,
             user = user,
             customTitle = customTitle,
             isAnonymous = isAnonymous!!,
@@ -65,11 +63,9 @@ data class ChatMemberApi(
             canManageTopics = canManageTopics,
         )
         ChatMemberType.MEMBER -> ChatMember.ChatMemberMember(
-            status = status,
             user = user,
         )
         ChatMemberType.RESTRICTED -> ChatMember.ChatMemberRestricted(
-            status = status,
             user = user,
             isMember = isMember!!,
             canSendMessages = canSendMessages!!,
@@ -89,11 +85,9 @@ data class ChatMemberApi(
             untilDate = untilDate!!,
         )
         ChatMemberType.LEFT -> ChatMember.ChatMemberLeft(
-            status = status,
             user = user,
         )
         ChatMemberType.KICKED -> ChatMember.ChatMemberBanned(
-            status = status,
             user = user,
             untilDate = untilDate!!,
         )
@@ -105,14 +99,14 @@ interface ChatMember {
     val user: User
 
     data class ChatMemberOwner(
-        override val status: ChatMemberType,
         override val user: User,
         val isAnonymous: Boolean,
         val customTitle: String?,
-    ) : ChatMember
+    ) : ChatMember {
+        override val status = ChatMemberType.CREATOR
+    }
 
     data class ChatMemberAdministrator(
-        override val status: ChatMemberType,
         override val user: User,
         val customTitle: String?,
         val isAnonymous: Boolean,
@@ -131,15 +125,17 @@ interface ChatMember {
         val canEditMessages: Boolean?,
         val canPinMessages: Boolean?,
         val canManageTopics: Boolean?,
-    ) : ChatMember
+    ) : ChatMember {
+        override val status = ChatMemberType.ADMINISTRATOR
+    }
 
     data class ChatMemberMember(
-        override val status: ChatMemberType,
         override val user: User,
-    ) : ChatMember
+    ) : ChatMember {
+        override val status = ChatMemberType.MEMBER
+    }
 
     data class ChatMemberRestricted(
-        override val status: ChatMemberType,
         override val user: User,
         val isMember: Boolean,
         val canSendMessages: Boolean,
@@ -157,16 +153,20 @@ interface ChatMember {
         val canPinMessages: Boolean,
         val canManageTopics: Boolean,
         val untilDate: Long,
-    ) : ChatMember
+    ) : ChatMember {
+        override val status = ChatMemberType.RESTRICTED
+    }
 
     data class ChatMemberLeft(
-        override val status: ChatMemberType,
         override val user: User,
-    ) : ChatMember
+    ) : ChatMember {
+        override val status = ChatMemberType.LEFT
+    }
 
     data class ChatMemberBanned(
-        override val status: ChatMemberType,
         override val user: User,
         val untilDate: Long,
-    ) : ChatMember
+    ) : ChatMember {
+        override val status = ChatMemberType.KICKED
+    }
 }

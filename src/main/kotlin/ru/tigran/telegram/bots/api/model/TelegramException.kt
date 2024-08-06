@@ -1,9 +1,8 @@
-package ru.tigran.telegram.bots.api.model.exception
+package ru.tigran.telegram.bots.api.model
 
 import org.springframework.http.HttpStatus
 import retrofit2.HttpException
 import retrofit2.Response
-import ru.tigran.telegram.bots.api.model.TelegramResponse
 
 data class TelegramException(
     val errorCode: HttpStatus,

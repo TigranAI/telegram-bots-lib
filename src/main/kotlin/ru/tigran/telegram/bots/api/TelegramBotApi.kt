@@ -43,4 +43,46 @@ interface TelegramBotApi {
 
     @POST("/sendAudio")
     suspend fun sendAudio(@Body audio: RequestBody): TelegramResponse<MessageApi>
+
+    @POST("/sendDocument")
+    suspend fun sendDocument(@Body document: RequestBody): TelegramResponse<MessageApi>
+
+    @POST("/sendVideo")
+    suspend fun sendVideo(@Body video: RequestBody): TelegramResponse<MessageApi>
+
+    @POST("/sendAnimation")
+    suspend fun sendAnimation(@Body animation: RequestBody): TelegramResponse<MessageApi>
+
+    @POST("/sendVoice")
+    suspend fun sendVoice(@Body voice: RequestBody): TelegramResponse<MessageApi>
+
+    @POST("/sendVideoNote")
+    suspend fun sendVideoNote(@Body videoNote: RequestBody): TelegramResponse<MessageApi>
+
+    @POST("/sendPaidMedia")
+    suspend fun sendPaidMedia(@Body paidMedia: RequestBody): TelegramResponse<MessageApi>
+
+    @POST("/sendMediaGroup")
+    suspend fun sendMediaGroup(@Body mediaGroup: RequestBody): TelegramResponse<List<MessageApi>>
+
+    @POST("/sendLocation")
+    suspend fun sendLocation(@Body location: RequestBody): TelegramResponse<MessageApi>
+
+    @POST("/sendVenue")
+    suspend fun sendVenue(@Body venue: RequestBody): TelegramResponse<MessageApi>
+
+    @POST("/sendContact")
+    suspend fun sendContact(@Body contact: RequestBody): TelegramResponse<MessageApi>
+
+    @POST("/sendPoll")
+    suspend fun sendPoll(@Body poll: RequestBody): TelegramResponse<MessageApi>
+
+    @POST("/sendDice")
+    suspend fun sendDice(@Body dice: RequestBody): TelegramResponse<MessageApi>
+
+    @POST("/sendChatAction")
+    suspend fun sendChatAction(@Body chatAction: RequestBody): TelegramResponse<Boolean>
+
+    @POST("/setMessageReaction")
+    suspend fun setMessageReaction(@Body messageReaction: RequestBody): TelegramResponse<Boolean>
 }

@@ -16,19 +16,16 @@ data class BackgroundApi(
 ) : ApiGodDto<Background> {
     override fun typify() = when(type) {
         BackgroundType.FILL -> Background.BackgroundTypeFill(
-            type = type,
             fill = fill!!.typify(),
             darkThemeDimming = darkThemeDimming!!,
         )
         BackgroundType.WALLPAPER -> Background.BackgroundTypeWallpaper(
-            type = type,
             document = document!!,
             darkThemeDimming = darkThemeDimming!!,
             isBlurred = isBlurred,
             isMoving = isMoving,
         )
         BackgroundType.PATTERN -> Background.BackgroundTypePattern(
-            type = type,
             document = document!!,
             fill = fill!!.typify(),
             intensity = intensity!!,
@@ -36,7 +33,6 @@ data class BackgroundApi(
             isMoving = isMoving,
         )
         BackgroundType.CHAT_THEME -> Background.BackgroundTypeChatTheme(
-            type = type,
             themeName = themeName!!,
         )
     }
@@ -46,30 +42,34 @@ interface Background {
     val type: BackgroundType
 
     data class BackgroundTypeFill(
-        override val type: BackgroundType,
         val fill: BackgroundFill,
         val darkThemeDimming: Boolean,
-    ) : Background
+    ) : Background {
+        override val type = BackgroundType.FILL
+    }
 
     data class BackgroundTypeWallpaper(
-        override val type: BackgroundType,
         val document: Document,
         val darkThemeDimming: Boolean,
         val isBlurred: Boolean?,
         val isMoving: Boolean?,
-    ) : Background
+    ) : Background {
+        override val type = BackgroundType.WALLPAPER
+    }
 
     data class BackgroundTypePattern(
-        override val type: BackgroundType,
         val document: Document,
         val fill: BackgroundFill,
         val intensity: Int,
         val isInverted: Boolean?,
         val isMoving: Boolean?,
-    ) : Background
+    ) : Background {
+        override val type = BackgroundType.PATTERN
+    }
 
     data class BackgroundTypeChatTheme(
-        override val type: BackgroundType,
         val themeName: String,
-    ) : Background
+    ) : Background {
+        override val type = BackgroundType.CHAT_THEME
+    }
 }

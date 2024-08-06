@@ -13,17 +13,14 @@ data class BackgroundFillApi(
 ) : ApiGodDto<BackgroundFill> {
     override fun typify() = when(type) {
         BackgroundFillType.SOLID -> BackgroundFill.BackgroundFillSolid(
-            type = type,
             color = color!!,
         )
         BackgroundFillType.GRADIENT -> BackgroundFill.BackgroundFillGradient(
-            type = type,
             topColor = topColor!!,
             bottomColor = bottomColor!!,
             rotationAngle = rotationAngle!!,
         )
         BackgroundFillType.FREEFORM_GRADIENT -> BackgroundFill.BackgroundFillFreeformGradient(
-            type = type,
             colors = colors!!,
         )
     }
@@ -33,19 +30,22 @@ interface BackgroundFill {
     val type: BackgroundFillType
 
     data class BackgroundFillSolid(
-        override val type: BackgroundFillType,
         val color: Int,
-    ) : BackgroundFill
+    ) : BackgroundFill {
+        override val type = BackgroundFillType.SOLID
+    }
 
     data class BackgroundFillGradient(
-        override val type: BackgroundFillType,
         val topColor: Int,
         val bottomColor: Int,
         val rotationAngle: Int,
-    ) : BackgroundFill
+    ) : BackgroundFill {
+        override val type = BackgroundFillType.GRADIENT
+    }
 
     data class BackgroundFillFreeformGradient(
-        override val type: BackgroundFillType,
         val colors: List<Int>,
-    ) : BackgroundFill
+    ) : BackgroundFill {
+        override val type = BackgroundFillType.FREEFORM_GRADIENT
+    }
 }

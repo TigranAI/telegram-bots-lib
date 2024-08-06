@@ -2,7 +2,7 @@ package ru.tigran.telegram.bots.util
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import retrofit2.*
-import ru.tigran.telegram.bots.api.model.exception.TelegramException
+import ru.tigran.telegram.bots.api.model.TelegramException
 import java.lang.reflect.Type
 
 private val log = KotlinLogging.logger {  }
