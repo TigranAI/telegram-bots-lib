@@ -1,9 +1,12 @@
 package ru.tigran.telegram.bots.api
 
 import org.springframework.stereotype.Service
-import ru.tigran.telegram.bots.api.model.dto.*
+import ru.tigran.telegram.bots.api.model.dto.Message
+import ru.tigran.telegram.bots.api.model.dto.MessageId
+import ru.tigran.telegram.bots.api.model.dto.Update
+import ru.tigran.telegram.bots.api.model.dto.User
 import ru.tigran.telegram.bots.api.model.request.*
-import ru.tigran.telegram.bots.util.TelegramRequestBodyBuilder
+import ru.tigran.telegram.bots.util.buildRequestBody
 
 @Service
 class TelegramAsyncClient(
@@ -19,68 +22,71 @@ class TelegramAsyncClient(
         api.close().unwrap()
 
     suspend fun getUpdates(request: GetUpdatesRequest): List<Update> =
-        api.getUpdates(TelegramRequestBodyBuilder(request).build()).unwrap().map { it.typify() }
+        api.getUpdates(buildRequestBody(request)).unwrap().map { it.typify() }
 
     suspend fun sendMessage(message: SendMessageRequest): Message =
-        api.sendMessage(TelegramRequestBodyBuilder(message).build()).unwrap().typify()
+        api.sendMessage(buildRequestBody(message)).unwrap().typify()
 
     suspend fun forwardMessage(message: ForwardMessageRequest): Message =
-        api.forwardMessage(TelegramRequestBodyBuilder(message).build()).unwrap().typify()
+        api.forwardMessage(buildRequestBody(message)).unwrap().typify()
 
     suspend fun forwardMessages(messages: ForwardMessagesRequest): List<MessageId> =
-        api.forwardMessages(TelegramRequestBodyBuilder(messages).build()).unwrap()
+        api.forwardMessages(buildRequestBody(messages)).unwrap()
 
     suspend fun copyMessage(message: CopyMessageRequest): MessageId =
-        api.copyMessage(TelegramRequestBodyBuilder(message).build()).unwrap()
+        api.copyMessage(buildRequestBody(message)).unwrap()
 
     suspend fun copyMessages(messages: CopyMessagesRequest): List<MessageId> =
-        api.copyMessages(TelegramRequestBodyBuilder(messages).build()).unwrap()
+        api.copyMessages(buildRequestBody(messages)).unwrap()
 
     suspend fun sendPhoto(photo: SendPhotoRequest): Message =
-        api.sendPhoto(TelegramRequestBodyBuilder(photo).build()).unwrap().typify()
+        api.sendPhoto(buildRequestBody(photo)).unwrap().typify()
 
     suspend fun sendAudio(audio: SendAudioRequest): Message =
-        api.sendAudio(TelegramRequestBodyBuilder(audio).build()).unwrap().typify()
+        api.sendAudio(buildRequestBody(audio)).unwrap().typify()
 
     suspend fun sendDocument(document: SendDocumentRequest): Message =
-        api.sendDocument(TelegramRequestBodyBuilder(document).build()).unwrap().typify()
+        api.sendDocument(buildRequestBody(document)).unwrap().typify()
 
     suspend fun sendVideo(video: SendVideoRequest): Message =
-        api.sendVideo(TelegramRequestBodyBuilder(video).build()).unwrap().typify()
+        api.sendVideo(buildRequestBody(video)).unwrap().typify()
 
     suspend fun sendAnimation(animation: SendAnimationRequest): Message =
-        api.sendAnimation(TelegramRequestBodyBuilder(animation).build()).unwrap().typify()
+        api.sendAnimation(buildRequestBody(animation)).unwrap().typify()
 
     suspend fun sendVoice(voice: SendVoiceRequest): Message =
-        api.sendVoice(TelegramRequestBodyBuilder(voice).build()).unwrap().typify()
+        api.sendVoice(buildRequestBody(voice)).unwrap().typify()
 
     suspend fun sendVideoNote(videoNote: SendVideoNoteRequest): Message =
-        api.sendVideoNote(TelegramRequestBodyBuilder(videoNote).build()).unwrap().typify()
+        api.sendVideoNote(buildRequestBody(videoNote)).unwrap().typify()
 
     suspend fun sendPaidMedia(paidMedia: SendPaidMediaRequest): Message =
-        api.sendPaidMedia(TelegramRequestBodyBuilder(paidMedia).build()).unwrap().typify()
+        api.sendPaidMedia(buildRequestBody(paidMedia)).unwrap().typify()
 
     suspend fun sendMediaGroup(mediaGroup: SendMediaGroupRequest): List<Message> =
-        api.sendMediaGroup(TelegramRequestBodyBuilder(mediaGroup).build()).unwrap().map { it.typify() }
+        api.sendMediaGroup(buildRequestBody(mediaGroup)).unwrap().map { it.typify() }
 
     suspend fun sendLocation(location: SendLocationRequest): Message =
-        api.sendLocation(TelegramRequestBodyBuilder(location).build()).unwrap().typify()
+        api.sendLocation(buildRequestBody(location)).unwrap().typify()
 
     suspend fun sendVenue(venue: SendVenueRequest): Message =
-        api.sendVenue(TelegramRequestBodyBuilder(venue).build()).unwrap().typify()
+        api.sendVenue(buildRequestBody(venue)).unwrap().typify()
 
     suspend fun sendContact(contact: SendContactRequest): Message =
-        api.sendContact(TelegramRequestBodyBuilder(contact).build()).unwrap().typify()
+        api.sendContact(buildRequestBody(contact)).unwrap().typify()
 
     suspend fun sendPoll(poll: SendPollRequest): Message =
-        api.sendPoll(TelegramRequestBodyBuilder(poll).build()).unwrap().typify()
+        api.sendPoll(buildRequestBody(poll)).unwrap().typify()
 
     suspend fun sendDice(dice: SendDiceRequest): Message =
-        api.sendDice(TelegramRequestBodyBuilder(dice).build()).unwrap().typify()
+        api.sendDice(buildRequestBody(dice)).unwrap().typify()
 
     suspend fun sendChatAction(chatAction: SendChatActionRequest): Boolean =
-        api.sendChatAction(TelegramRequestBodyBuilder(chatAction).build()).unwrap()
+        api.sendChatAction(buildRequestBody(chatAction)).unwrap()
 
     suspend fun setMessageReaction(messageReaction: SetMessageReactionRequest): Boolean =
-        api.setMessageReaction(TelegramRequestBodyBuilder(messageReaction).build()).unwrap()
+        api.setMessageReaction(buildRequestBody(messageReaction)).unwrap()
+    
+    suspend fun deleteMessages(messages: DeleteMessagesRequest): Boolean =
+        api.deleteMessages(buildRequestBody(messages)).unwrap()
 }

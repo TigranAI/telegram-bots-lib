@@ -12,46 +12,36 @@ import ru.tigran.telegram.bots.configuration.api.telegramApiCompatibleJacksonObj
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.memberProperties
 
-class TelegramRequestBodyBuilder(
-    private val request: TelegramRequest,
-) {
-    fun build(): RequestBody {
-        request.validate()
+fun buildRequestBody(request: TelegramRequest): RequestBody {
+    request.validate()
 
-        val properties = request::class.memberProperties.associateWith { it.call(request) }
-        return if (properties.any { hasMultipartFile(it.value) }) {
-            buildMultipartBody(properties)
-        } else {
-            buildJsonBody()
-        }
+    val properties = request::class.memberProperties.associateWith { it.call(request) }
+    return if (properties.any { hasMultipartFile(it.value) }) {
+        buildMultipartBody(properties)
+    } else {
+        buildJsonBody(request)
     }
+}
 
-    private fun buildMultipartBody(properties: Map<KProperty1<out TelegramRequest, *>, Any?>): RequestBody {
-        val multipartBody = MultipartBody.Builder().setType(MultipartBody.FORM)
-        properties.forEach { (prop, value) -> multipartBody.addAny(prop.name.toSnakeCase(), value) }
-        return multipartBody.build()
+private fun buildMultipartBody(properties: Map<KProperty1<out TelegramRequest, *>, Any?>): RequestBody {
+    val multipartBody = MultipartBody.Builder().setType(MultipartBody.FORM)
+    properties.forEach { (prop, value) -> multipartBody.addAny(prop.name.toSnakeCase(), value) }
+    return multipartBody.build()
+}
+
+private fun buildJsonBody(request: TelegramRequest): RequestBody = RequestBody.create(
+    MediaType.parse("application/json"),
+    telegramApiCompatibleJacksonObjectMapper.writeValueAsString(request),
+)
+
+private fun hasMultipartFile(value: Any?): Boolean {
+    if (value is MultipartFile) {
+        return value.hasFile()
     }
-
-    private fun buildJsonBody(): RequestBody = RequestBody.create(
-        MediaType.parse("application/json"),
-        telegramApiCompatibleJacksonObjectMapper.writeValueAsString(request),
-    )
-
-    private fun hasMultipartFile(value: Any?): Boolean {
-        if (value is MultipartFile) {
-            return value.hasFile()
-        }
-        if (value.tryCast<List<InputFile>>()?.any { hasMultipartFile(it) } == true) {
-            return true
-        }
-        if (value.tryCast<List<InputMedia>>()?.any { hasMultipartFile(it) } == true) {
-            return true
-        }
-        if (value.tryCast<List<InputPaidMedia>>()?.any { hasMultipartFile(it) } == true) {
-            return true
-        }
-        return false
+    if (value is List<*> && value.any { hasMultipartFile(it) }) {
+        return true
     }
+    return false
 }
 
 private fun MultipartBody.Builder.addAny(name: String, value: Any?) {

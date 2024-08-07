@@ -28,6 +28,3 @@ inline fun <reified T> KProperty<T>.isSubclassOf(kClass: KClass<*>) =
 
 private val humps = "(?<=.)(?=\\p{Upper})".toRegex()
 fun String.toSnakeCase() = replace(humps, "_").lowercase()
-
-inline fun <reified T> Any?.tryCast(default: T? = null): T? =
-    if (this is T) this else default
