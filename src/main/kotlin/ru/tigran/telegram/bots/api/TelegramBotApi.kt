@@ -88,4 +88,7 @@ interface TelegramBotApi {
 
     @POST("/deleteMessages")
     suspend fun deleteMessages(@Body messages: RequestBody): TelegramResponse<Boolean>
+
+    @POST("/setMyCommands")
+    suspend fun setMyCommands(@Body commands: RequestBody): TelegramResponse<Boolean>
 }

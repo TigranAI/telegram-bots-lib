@@ -89,4 +89,7 @@ class TelegramAsyncClient(
     
     suspend fun deleteMessages(messages: DeleteMessagesRequest): Boolean =
         api.deleteMessages(buildRequestBody(messages)).unwrap()
+
+    suspend fun setMyCommands(commands: SetMyCommandsRequest): Boolean =
+        api.setMyCommands(buildRequestBody(commands)).unwrap()
 }
