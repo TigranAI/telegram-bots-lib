@@ -4,11 +4,10 @@ import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
+import retrofit2.http.Query
 import ru.tigran.telegram.bots.api.model.TelegramResponse
-import ru.tigran.telegram.bots.api.model.dto.MessageApi
-import ru.tigran.telegram.bots.api.model.dto.MessageId
-import ru.tigran.telegram.bots.api.model.dto.UpdateApi
-import ru.tigran.telegram.bots.api.model.dto.User
+import ru.tigran.telegram.bots.api.model.dto.*
 
 interface TelegramBotApi {
     @GET("/getMe")
@@ -85,6 +84,96 @@ interface TelegramBotApi {
 
     @POST("/setMessageReaction")
     suspend fun setMessageReaction(@Body messageReaction: RequestBody): TelegramResponse<Boolean>
+
+    @POST("/getUserProfilePhotos")
+    suspend fun getUserProfilePhotos(@Body photos: RequestBody): TelegramResponse<UserProfilePhotos>
+
+    @GET("/getFile")
+    suspend fun getFile(@Query("file_id") fileId: String): TelegramResponse<File>
+
+    @GET("/{filePath}")
+    suspend fun downloadFile(@Path("filePath") filePath: String): ByteArray
+
+    @POST("/banChatMember")
+    suspend fun banChatMember(@Body chatMember: RequestBody): TelegramResponse<Boolean>
+
+    @POST("/unbanChatMember")
+    suspend fun unbanChatMember(@Body chatMember: RequestBody): TelegramResponse<Boolean>
+
+    @POST("/restrictChatMember")
+    suspend fun restrictChatMember(@Body chatMember: RequestBody): TelegramResponse<Boolean>
+
+    @POST("/promoteChatMember")
+    suspend fun promoteChatMember(@Body chatMember: RequestBody): TelegramResponse<Boolean>
+
+    @POST("/setChatAdministratorCustomTitle")
+    suspend fun setChatAdministratorCustomTitle(@Body administrator: RequestBody): TelegramResponse<Boolean>
+
+    @POST("/banChatSenderChat")
+    suspend fun banChatSenderChat(@Body senderChat: RequestBody): TelegramResponse<Boolean>
+
+    @POST("/unbanChatSenderChat")
+    suspend fun unbanChatSenderChat(@Body senderChat: RequestBody): TelegramResponse<Boolean>
+
+    @POST("/setChatPermissions")
+    suspend fun setChatPermissions(@Body chatPermissions: RequestBody): TelegramResponse<Boolean>
+
+    @POST("/exportChatInviteLink")
+    suspend fun exportChatInviteLink(@Body inviteLink: RequestBody): TelegramResponse<String>
+
+    @POST("/createChatInviteLink")
+    suspend fun createChatInviteLink(@Body inviteLink: RequestBody): TelegramResponse<ChatInviteLink>
+
+    @POST("/editChatInviteLink")
+    suspend fun editChatInviteLink(@Body inviteLink: RequestBody): TelegramResponse<ChatInviteLink>
+
+    @POST("/revokeChatInviteLink")
+    suspend fun revokeChatInviteLink(@Body inviteLink: RequestBody): TelegramResponse<ChatInviteLink>
+
+    @POST("/approveChatJoinRequest")
+    suspend fun approveChatJoinRequest(@Body joinRequest: RequestBody): TelegramResponse<Boolean>
+
+    @POST("/declineChatJoinRequest")
+    suspend fun declineChatJoinRequest(@Body joinRequest: RequestBody): TelegramResponse<Boolean>
+
+    @POST("/setChatPhoto")
+    suspend fun setChatPhoto(@Body chatPhoto: RequestBody): TelegramResponse<Boolean>
+
+    @POST("/deleteChatPhoto")
+    suspend fun deleteChatPhoto(@Body chatPhoto: RequestBody): TelegramResponse<Boolean>
+
+    @POST("/setChatTitle")
+    suspend fun setChatTitle(@Body chatTitle: RequestBody): TelegramResponse<Boolean>
+
+    @POST("/setChatDescription")
+    suspend fun setChatDescription(@Body chatDescription: RequestBody): TelegramResponse<Boolean>
+
+    @POST("/pinChatMessage")
+    suspend fun pinChatMessage(@Body chatMessage: RequestBody): TelegramResponse<Boolean>
+
+    @POST("/unpinChatMessage")
+    suspend fun unpinChatMessage(@Body chatMessage: RequestBody): TelegramResponse<Boolean>
+
+    @POST("/unpinAllChatMessages")
+    suspend fun unpinAllChatMessages(@Body chatMessages: RequestBody): TelegramResponse<Boolean>
+
+    @POST("/leaveChat")
+    suspend fun leaveChat(@Body chat: RequestBody): TelegramResponse<Boolean>
+
+    @GET("/getChat")
+    suspend fun getChat(@Query("chat_id") chatId: String): TelegramResponse<ChatFullInfoApi>
+
+    @GET("/getChatAdministrators")
+    suspend fun getChatAdministrators(@Query("chat_id") chatId: String): TelegramResponse<List<ChatMemberApi>>
+
+    @GET("/getChatMemberCount")
+    suspend fun getChatMemberCount(@Query("chat_id") chatId: String): TelegramResponse<Int>
+
+    @GET("/getChatMember")
+    suspend fun getChatMember(
+        @Query("chat_id") chatId: String,
+        @Query("user_id") userId: Long,
+    ): TelegramResponse<ChatMemberApi>
 
     @POST("/deleteMessages")
     suspend fun deleteMessages(@Body messages: RequestBody): TelegramResponse<Boolean>
